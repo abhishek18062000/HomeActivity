@@ -19,6 +19,7 @@
         <activity android:name=".Cart.CartActivity"></activity>
         <activity android:name=".Eco.EcoActivity"></activity>
         <activity android:name=".Profile.ProfileActivity"></activity>
+        <activity android:name=".Login.LoginActivity"></activity>
     </application>
 
 </manifest>

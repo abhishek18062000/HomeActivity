@@ -1,6 +1,8 @@
 package com.example.homeactivity.Home;
 
 import android.content.Context;
+import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -10,8 +12,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.example.homeactivity.Login.LoginActivity;
 import com.example.homeactivity.R;
 import com.example.homeactivity.utils.BottomNavigationViewHelper;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 public class MainActivity extends AppCompatActivity {
@@ -20,14 +25,50 @@ public class MainActivity extends AppCompatActivity {
     private Context mcontext= MainActivity.this;
     private static final int ACTIVITY_NUM =0;
 
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthListner;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        setupFirebaseAuth();
         setupBottomNavigationView();
         setViewPager();
     }
+    private void checkCurrentUser(FirebaseUser user){
+        if (user == null){
+            Intent intent= new Intent(mcontext, LoginActivity.class);
+            startActivity(intent);
+        }
+    }
+    private void setupFirebaseAuth(){
+        mAuth = FirebaseAuth.getInstance();
+        mAuthListner= new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                checkCurrentUser(user);
+                if(user!=null){
+                    Log.d(TAG,"USER logged in"+ user.getUid());
+                }
+                else{
+                    Log.d(TAG,"USER not logged in");
+                }
+            }
+        };
+    }
+    @Override
+    public void onStart() {
+        super.onStart();
+        mAuth.addAuthStateListener(mAuthListner);
+    }
+    @Override
+    public void onStop() {
+        super.onStop();
+        mAuth.removeAuthStateListener(mAuthListner);
+    }
+
     private void setViewPager (){
         SectionPagerAdapter adapter = new SectionPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new CameraFragment());
