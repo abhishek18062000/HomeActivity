@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         setupBottomNavigationView();
         setViewPager();
     }
-
+//---------------------------------------------------------------LOCATION------------------------------------------------------------------------
     private void getCurrentLocation() {
         final LocationRequest locationRequest = new LocationRequest();
         locationRequest.setInterval(10000);
@@ -79,9 +79,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }, Looper.getMainLooper());
-
    }
-
+//---------------------------------------------------------------FIREBASE--------------------------------------------------------------------------
     private void checkCurrentUser(FirebaseUser user){
         if (user == null){
             Intent intent= new Intent(mcontext, LoginActivity.class);
@@ -130,8 +129,8 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_camera);
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_insta_icon);
         tabLayout.getTabAt(2).setIcon(R.drawable.ic_message);
-
     }
+
     private void setupBottomNavigationView(){
         Log.d(TAG, "setupBottomNavigationView: setting up bottom navigation view");
         BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottomViewBar);
@@ -141,8 +140,4 @@ public class MainActivity extends AppCompatActivity {
         MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
         menuItem.setChecked(true);
     }
-
-
-
-
 }

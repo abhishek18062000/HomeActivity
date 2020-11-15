@@ -71,11 +71,24 @@ public class LoginActivity extends AppCompatActivity {
                     mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
+                            FirebaseUser user = mAuth.getCurrentUser();
                             if(!task.isSuccessful()) {
                                 Toast.makeText(LoginActivity.this, "unSUCCESSFUL",Toast.LENGTH_SHORT).show();
                             }
                             else {
-                               Toast.makeText(LoginActivity.this,"SUCCESS",Toast.LENGTH_SHORT).show();
+                                try {
+                                    if(user.isEmailVerified()){
+                                        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                                        startActivity(intent);
+                                    }
+                                    else{
+                                        Toast.makeText(mContext, "Email is not verified ", Toast.LENGTH_SHORT).show();
+                                        mAuth.signOut();
+                                    }
+                                }
+                                catch (NullPointerException e){
+                                    Log.e(TAG, "oncompete: NulPointer exception"+e.getMessage());
+                                }
                             }
                         }
                     });
@@ -95,11 +108,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
-        if(mAuth.getCurrentUser()!=null){
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(intent);
-            finish();
-        }
+
     }
 
 
